@@ -1,73 +1,7 @@
-# Clase Libro
-class Libro:
-    def __init__(self, titulo, autor, isbn):
-        self.titulo = titulo
-        self.autor = autor
-        self.isbn = isbn
-        self.disponible = True  # El libro está disponible al principio
+from libro import Libro, LibroDigital
+from usuario import Usuario
+from biblioteca import Biblioteca
 
-    def __str__(self):
-        return f"{self.titulo} - {self.autor} (ISBN: {self.isbn})"
-
-# Clase Usuario
-class Usuario:
-    def __init__(self, nombre, id_usuario):
-        self.nombre = nombre
-        self.id_usuario = id_usuario
-        self.libros_prestados = []  # Lista de libros que ha prestado
-
-    def pedir_prestado(self, libro):
-        if len(self.libros_prestados) >= 3:
-            return f"⚠️ El usuario {self.nombre} ya tiene el máximo de 3 libros prestados."
-        if not libro.disponible:
-            return f"⚠️ El libro '{libro.titulo}' no está disponible."
-        self.libros_prestados.append(libro)
-        libro.disponible = False
-        return f"✅ El libro '{libro.titulo}' ha sido prestado a {self.nombre}."
-
-    def devolver_libro(self, libro):
-        if libro not in self.libros_prestados:
-            return f"⚠️ El usuario {self.nombre} no tiene el libro '{libro.titulo}' prestado."
-        self.libros_prestados.remove(libro)
-        libro.disponible = True
-        return f"✅ El libro '{libro.titulo}' ha sido devuelto."
-
-# Clase Biblioteca
-class Biblioteca:
-    def __init__(self):
-        self.libros = []
-        self.usuarios = []
-
-    def agregar_libro(self, libro):
-        self.libros.append(libro)
-
-    def registrar_usuario(self, usuario):
-        self.usuarios.append(usuario)
-
-    def buscar_libro(self, query):
-        # Buscar por título o autor
-        return [libro for libro in self.libros if query.lower() in libro.titulo.lower() or query.lower() in libro.autor.lower()]
-
-    def buscar_usuario(self, id_usuario):
-        # Buscar usuario por ID
-        for usuario in self.usuarios:
-            if usuario.id_usuario == id_usuario:
-                return usuario
-        return None
-
-    def listar_libros_disponibles(self):
-        return [libro for libro in self.libros if libro.disponible]
-
-# Clase LibroDigital (hereda de Libro)
-class LibroDigital(Libro):
-    def __init__(self, titulo, autor, isbn, tamano_mb):
-        super().__init__(titulo, autor, isbn)
-        self.tamano_mb = tamano_mb  # Tamaño en MB
-
-    def descargar(self):
-        return f"✅ El libro digital '{self.titulo}' está siendo descargado. Tamaño: {self.tamano_mb} MB."
-
-# Funciones de utilidad
 def mostrar_libros_disponibles(biblioteca):
     disponibles = biblioteca.listar_libros_disponibles()
     if disponibles:
@@ -86,7 +20,6 @@ def mostrar_usuarios(biblioteca):
     else:
         print("⚠️ No hay usuarios registrados.")
 
-# Función principal para interactuar con el sistema
 def menu():
     biblioteca = Biblioteca()
 
